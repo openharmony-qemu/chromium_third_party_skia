@@ -431,6 +431,9 @@ protected:
         return SkTypeface::MakeEmpty();
     }
 
+#if BUILDFLAG(ARKWEB_THEME_FONT)
+    void onInvalidateThemeFont(int fd) override {}
+#endif
 
 private:
 
