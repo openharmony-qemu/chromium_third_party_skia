@@ -117,7 +117,9 @@ public:
 #if BUILDFLAG(ARKWEB_THEME_FONT)
     void InvalidateThemeFont(const std::vector<int>& fds);
 #endif
-
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    void PrepareFontConfig();
+#endif
     /* Returns an empty font manager without any typeface dependencies */
     static sk_sp<SkFontMgr> RefEmpty();
 
@@ -147,6 +149,9 @@ protected:
 
 #if BUILDFLAG(ARKWEB_THEME_FONT)
     virtual void onInvalidateThemeFont(const std::vector<int>& fds) = 0;
+#endif
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    virtual void onPrepareFontConfig() = 0;
 #endif
 };
 
