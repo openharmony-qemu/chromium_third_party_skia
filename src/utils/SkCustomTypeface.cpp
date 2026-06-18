@@ -19,6 +19,7 @@
 #include "include/core/SkMatrix.h"
 #include "include/core/SkPaint.h"
 #include "include/core/SkPath.h"
+#include "include/core/SkPathBuilder.h"
 #include "include/core/SkPoint.h"
 #include "include/core/SkRect.h"
 #include "include/core/SkRefCnt.h"
@@ -389,15 +390,20 @@ std::unique_ptr<SkStreamAsset> SkUserTypeface::onOpenStream(int* ttcIndex) const
     wstream.write32(this->glyphCount());
 
     for (const auto& rec : fGlyphRecs) {
-        wstream.write32(rec.isDrawable() ? GlyphType::kDrawable : GlyphType::kPath);
+        wstream.write32(GlyphType::kPath);
 
         wstream.writeScalar(rec.fAdvance);
 
         wstream.write(&rec.fBounds, sizeof(rec.fBounds));
 
-        auto data = rec.isDrawable()
-                ? rec.fDrawable->serialize()
-                : rec.fPath.serialize();
+        sk_sp<SkData> data;
+        if (rec.isDrawable()) {
+            // We simplify drawables on serialization to make deserializing easier/safer.
+            SkPath empty = SkPath::Rect(rec.fBounds);
+            data = empty.serialize();
+        } else {
+           data = rec.fPath.serialize();
+        }
 
         const size_t sz = data->size();
         SkASSERT(SkIsAlign4(sz));
@@ -459,8 +465,8 @@ sk_sp<SkTypeface> SkCustomTypefaceBuilder::Deserialize(SkStream* stream) {
 
     for (int i = 0; i < glyphCount; ++i) {
         uint32_t gtype;
-        if (!stream->readU32(&gtype) ||
-            (gtype != GlyphType::kDrawable && gtype != GlyphType::kPath)) {
+        // We don't support deserializing GlyphType::kDrawable because drawables can be *anything*
+        if (!stream->readU32(&gtype) || (gtype != GlyphType::kPath)) {
             return nullptr;
         }
 
@@ -474,7 +480,7 @@ sk_sp<SkTypeface> SkCustomTypefaceBuilder::Deserialize(SkStream* stream) {
             return nullptr;
         }
 
-        // SkPath and SkDrawable cannot read from a stream, so we have to page them into ram
+        // SkPath cannot be read from a stream, so we have to page them into ram
         size_t sz;
         if (stream->read(&sz, sizeof(sz)) != sizeof(sz)) {
             return nullptr;
@@ -491,25 +497,11 @@ sk_sp<SkTypeface> SkCustomTypefaceBuilder::Deserialize(SkStream* stream) {
             return nullptr;
         }
 
-        switch (gtype) {
-        case GlyphType::kDrawable: {
-            SkDeserialProcs procs;
-            procs.fAllowSkSL = false;
-            auto drawable = SkDrawable::Deserialize(data->data(), data->size(), &procs);
-            if (!drawable) {
-                return nullptr;
-            }
-            builder.setGlyph(i, advance, std::move(drawable), bounds);
-        } break;
-        case GlyphType::kPath: {
-            SkPath path;
-            if (path.readFromMemory(data->data(), data->size()) != data->size()) {
-                return nullptr;
-            }
-
-            builder.setGlyph(i, advance, path);
-        } break;
-        default:
+        size_t bytesRead = 0;
+        auto path = SkPath::ReadFromMemory(data->data(), data->size(), &bytesRead);
+        if (path.has_value() && (bytesRead == data->size())) {
+            builder.setGlyph(i, advance, *path);
+        } else {
             return nullptr;
         }
     }
