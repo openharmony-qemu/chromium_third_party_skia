@@ -698,7 +698,7 @@ void add_conics(const SkPoint p[3],
         set_conic_coeffs(p, *vert, weight);
         *vert += kQuadNumVertices;
     } else {
-            backfill_degenerate_bezier(vert);
+        backfill_degenerate_bezier(vert);
     }
 }
 
