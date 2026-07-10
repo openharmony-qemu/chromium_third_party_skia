@@ -435,6 +435,10 @@ protected:
     void onInvalidateThemeFont(const std::vector<int>& fds) override {}
 #endif
 
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    void onPrepareFontConfig() override {}
+#endif
+
 private:
 
     std::unique_ptr<SkFontScanner> fScanner;

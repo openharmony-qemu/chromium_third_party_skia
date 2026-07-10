@@ -85,6 +85,9 @@ protected:
 #if BUILDFLAG(ARKWEB_THEME_FONT)
     void onInvalidateThemeFont(const std::vector<int>& fds) override {}
 #endif
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    void onPrepareFontConfig() override {}
+#endif
 };
 
 static sk_sp<SkFontStyleSet> emptyOnNull(sk_sp<SkFontStyleSet>&& fsset) {
@@ -158,6 +161,12 @@ sk_sp<SkTypeface> SkFontMgr::legacyMakeTypeface(const char familyName[], SkFontS
 #if BUILDFLAG(ARKWEB_THEME_FONT)
 void SkFontMgr::InvalidateThemeFont(const std::vector<int>& fds) {
     this->onInvalidateThemeFont(fds);
+}
+#endif
+
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+void SkFontMgr::PrepareFontConfig() {
+    this->onPrepareFontConfig();
 }
 #endif
 
