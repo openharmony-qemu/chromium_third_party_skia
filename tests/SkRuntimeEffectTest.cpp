@@ -1827,10 +1827,10 @@ DEF_TEST(SkRuntimeShader_b500080194, r) {
     auto [effect, err] = SkRuntimeEffect::MakeForShader(SkString(kSkSL));
     
     if (!effect) {
-        REPORT_FAILURE(r, "SkSL compile failed", SkString("SkSl compile failed"));
+        REPORT_FAILURE(r, "SkSL compile failed", SkString("SkSL compile failed"));
     } else {
         sk_sp<SkShader> shader = effect->makeShader(/*uniforms=*/nullptr, {});
-        Skpaint paint;
+        SkPaint paint;
         paint.setShader(std::move(shader));
         sk_sp<SkSurface> surface = SkSurfaces::Raster(SkImageInfo::MakeN32Premul(64, 64));
         // This caused a crash before the patch.
