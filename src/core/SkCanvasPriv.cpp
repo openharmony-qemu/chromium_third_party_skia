@@ -75,6 +75,18 @@ bool SkCanvasPriv::ReadLattice(SkReadBuffer& buffer, SkCanvas::Lattice* lattice)
                                                      ((uint64_t) lattice->fYCount + 1)) {
             return false;
         }
+    if (lattice->fXCount < 0) {
+        return false;
+    }
+    if (lattice->fYCount < 0) {
+        return false;
+    }
+    // flagCount was serialized as (xCount + 1) * (yCount + 1) if there were rect types and colors,
+    // so if that isn't still the case the buffer is invalid.
+        if (flagCount < 0 || (uint64_t) flagCount != ((uint64_t) lattice->fXCount + 1) *
+                                                     ((uint64_t) lattice->fYCount + 1)) {
+            return false;
+        }
         lattice->fRectTypes = buffer.skipT<SkCanvas::Lattice::RectType>(flagCount);
         lattice->fColors = buffer.skipT<SkColor>(flagCount);
     }
