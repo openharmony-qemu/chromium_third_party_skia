@@ -463,9 +463,13 @@ private:
  */
 class FloatStorageManager : public SkRefCnt {
 public:
-    FloatStorageManager() = default;
+    FloatStorageManager() { this->reset(); }
 
     void reset() {
+        // Remove the manually added refs on the keys in fGradientOffsetCache
+        for (auto [k, _] : fGradientOffsetCache) {
+            k->unref(); // k might be deleted at this point but we won't use it anymore
+        }
         fGradientStorage.clear();
         fGradientOffsetCache.reset();
     }
@@ -475,12 +479,15 @@ public:
     // and returns a pointer to the start of the new data and the calculated offset.
     std::pair<float*, int> allocateGradientData(int numStops, const SkGradientBaseShader* shader) {
         SkASSERT(!this->isFinalized());
-        int* existingOffset = fGradientOffsetCache.find(shader->uniqueID());
+        int* existingOffset = fGradientOffsetCache.find(shader);
         if (existingOffset) {
             return {nullptr, *existingOffset};
         }
         auto [ptr, offset] = this->allocateFloatData(numStops * 5); // 4 for color, 1 for offset
-        fGradientOffsetCache.set(shader->uniqueID(), offset);
+        // Since FloatStorageManager is single threaded, adding a ref and then storing in the
+        // map should be fine.
+        shader->ref();
+        fGradientOffsetCache.set(shader, offset);
 
         return {ptr, offset};
     }
@@ -522,8 +529,18 @@ private:
     // storage buffer can be bound once and accessed at random.
     SkTDArray<float> fGradientStorage;
 
-    // We use the shader's unique ID as a key to de-duplicate gradient data.
-    skia_private::THashMap<uint32_t, int> fGradientOffsetCache;
+    // We use the shader's address as a key to de-duplicate gradient data. Each key has a ref added
+    // when it's first put in the map. The map does not key off of sk_sp<SkGradientBaseShader> to as
+    // that is not compatible with SkGoodHash. These refs are dropped in reset(). While this extends
+    // the lifetime of the SkShaders, it only applies to large gradients. Hopefully clients are
+    // trying to reuse such shaders across frames already.
+    //
+    // If we didn't keep the shaders alive, we'd have to worry about cache collisions from
+    // re-allocations using the same address. Using a unique ID can wrap, leading to potential
+    // mismatches. Adding sufficient data to eliminate this risk (e.g. keying off the unique ID, the
+    // address, the number of color stops, AND a hash of the color data) is likely more expensive
+    // than taking a ref.
+    skia_private::THashMap<const SkGradientBaseShader*, int> fGradientOffsetCache;
 
     std::optional<BindBufferInfo> fBufferInfo = std::nullopt;
 };
