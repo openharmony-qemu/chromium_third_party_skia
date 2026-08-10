@@ -1374,7 +1374,7 @@ Program::StackDepths Program::tempStackMaxDepths() const {
         current[stackID] += stack_usage(inst);
         largest[stackID] = std::max(current[stackID], largest[stackID]);
         // If we assert here, the generated program has popped off the top of the stack.
-        SkASSERTF_RELEASE(current[stackID] >= 0, "unbalanced temp stack push/pop on stack.");
+        SkASSERTF_RELEASE(current[stackID] >= 0, "unbalanced temp stack push/pop on stack");
     }
 
     // Ensure that when the program is complete, our stacks are fully balanced.
