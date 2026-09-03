@@ -302,6 +302,13 @@ bool GrVkCaps::onCanCopySurface(const GrSurfaceProxy* dst, const SkIRect& dstRec
 
 }
 
+namespace {
+bool is_tiler_gpu(uint32_t vendorId) {
+    return vendorId == skgpu::kARM_VkVendor ||
+           vendorId == skgpu::kQualcomm_VkVendor ||
+           vendorId == skgpu::kImagination_VkVendor;
+}
+} // anonymous namespace
 void GrVkCaps::init(const GrContextOptions& contextOptions,
                     const skgpu::VulkanInterface* vkInterface,
                     VkPhysicalDevice physDev,
@@ -419,20 +426,16 @@ void GrVkCaps::init(const GrContextOptions& contextOptions,
     this->initGrCaps(vkInterface, physDev, properties, memoryProperties, features, extensions);
     this->initShaderCaps(properties, features);
 
-    if (skgpu::kQualcomm_VkVendor == properties.vendorID) {
-        // A "clear" load for atlases runs faster on QC than a "discard" load followed by a
+    if (is_tiler_gpu(properties.vendorID)) {
+        // A "clear" load for atlases runs faster on tiler GPUs than a "discard" load followed by a
         // scissored clear.
-        // On NVIDIA and Intel, the discard load followed by clear is faster.
-        // TODO: Evaluate on ARM, Imagination, and ATI.
         fPreferFullscreenClears = true;
+        fDiscardStencilValuesAfterRenderPass = true;
+        fClearsAreFasterThanLoads = true;
     }
 
     if (properties.vendorID == skgpu::kNvidia_VkVendor ||
-        properties.vendorID == skgpu::kAMD_VkVendor) {
-        // On discrete GPUs it can be faster to read gpu only memory compared to memory that is also
-        // mappable on the host.
-        fGpuOnlyBuffersMorePerformant = true;
-
+        properties.vendorID == skgpu::kIntel_VkVendor) {
         // On discrete GPUs we try to use special DEVICE_LOCAL and HOST_VISIBLE memory for our
         // cpu write, gpu read buffers. This memory is not ideal to be kept persistently mapped.
         // Some discrete GPUs do not expose this special memory, however we still disable
