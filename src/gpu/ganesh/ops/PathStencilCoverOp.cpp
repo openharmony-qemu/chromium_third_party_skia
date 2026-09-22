@@ -45,6 +45,7 @@
 #include <algorithm>
 #include <array>
 #include <cstddef>
+#include <limits>
 #include <memory>
 
 class GrDstProxyView;
@@ -274,10 +275,17 @@ void PathStencilCoverOp::onPrepare(GrOpFlushState* flushState) {
         // the number of combined verbs from the paths in the list.
         // A single n-sided polygon is fanned by n-2 triangles. Multiple polygons with a combined
         // edge count of n are fanned by strictly fewer triangles.
-        int maxTrianglesInFans = std::max(fTotalCombinedPathVerbCnt - 2, 0);
+        const int maxTrianglesInFans = std::max(fTotalCombinedPathVerbCnt - 2, 0);
+        // Semi-conservative guard against 3*maxTrianglesInFans > int max. Just use >> 2 instead of
+        // divide-by-3. Anything that large is a pathologic input that will likely OOM anyways, so
+        // dropping at 1/4 of int max vs. 1/3 of int max doesn't matter.
+        if ((std::numeric_limits<int>::max() >> 2) < maxTrianglesInFans) SK_UNLIKELY {
+            SkDebugf("Excessive triangle count, dropping draw: %d\n", maxTrianglesInFans);
+            return;
+        }
         int fanTriangleCount = 0;
         if (VertexWriter triangleVertexWriter =
-                    vertexAlloc.lockWriter(sizeof(SkPoint), maxTrianglesInFans * 3)) {
+                    vertexAlloc.lockWriter(sizeof(SkPoint), 3 * maxTrianglesInFans)) {
             for (auto [pathMatrix, path, color] : *fPathDrawList) {
                 tess::AffineMatrix m(pathMatrix);
                 for (tess::PathMiddleOutFanIter it(path); !it.done();) {
