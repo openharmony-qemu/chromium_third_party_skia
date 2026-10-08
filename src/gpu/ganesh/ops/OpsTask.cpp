@@ -687,6 +687,9 @@ GrRenderTask::ExecutionResult OpsTask::onExecute(GrOpFlushState* flushState) {
     if (!renderPass) {
         return ExecutionResult::RanButFailed();
     }
+    if (updateClearedStencilArea) {
+        stencil->markAreaCleared(boundsRequiredByStencil);
+    }
     flushState->setOpsRenderPass(renderPass);
     renderPass->begin();
 
