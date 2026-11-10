@@ -1,5 +1,7 @@
 diff a/src/gpu/ganesh/SurfaceContext.h b/src/gpu/ganesh/SurfaceContext.h	(rejected hunks)
-@@ -213,6 +213,8 @@ protected:
+@@ -211,10 +211,12 @@ protected:
+         // If this is null then the transfer buffer will contain the data in the requested
+         // color type. Otherwise, when the transfer is done this must be called to convert
          // from the transfer buffer's color type to the requested color type.
          std::function<ConversionFn> fPixelConverter;
      };
@@ -8,3 +10,5 @@ diff a/src/gpu/ganesh/SurfaceContext.h b/src/gpu/ganesh/SurfaceContext.h	(reject
      PixelTransferResult transferPixels(GrColorType colorType, const SkIRect& rect);
  
      // The async read step of asyncRescaleAndReadPixels()
+     void asyncReadPixels(GrDirectContext*,
+                          const SkIRect& srcRect,

@@ -1,5 +1,7 @@
 diff a/src/core/SkReadPixelsRec.h b/src/core/SkReadPixelsRec.h	(rejected hunks)
-@@ -17,6 +17,11 @@
+@@ -15,10 +15,15 @@
+ 
+ /**
   *  Helper class to package and trim the parameters passed to readPixels()
   */
  struct SkReadPixelsRec {
@@ -11,7 +13,11 @@ diff a/src/core/SkReadPixelsRec.h b/src/core/SkReadPixelsRec.h	(rejected hunks)
      SkReadPixelsRec(const SkImageInfo& info, void* pixels, size_t rowBytes, int x, int y)
          : fPixels(pixels)
          , fRowBytes(rowBytes)
-@@ -41,7 +46,8 @@ struct SkReadPixelsRec {
+         , fInfo(info)
+         , fX(x)
+@@ -39,11 +44,12 @@ struct SkReadPixelsRec {
+     int         fX;
+     int         fY;
  
      /*
       *  On true, may have modified its fields (except fRowBytes) to make it a legal subset
@@ -21,3 +27,5 @@ diff a/src/core/SkReadPixelsRec.h b/src/core/SkReadPixelsRec.h	(rejected hunks)
       *
       *  On false, leaves self unchanged, but indicates that it does not overlap src, or
       *  is not valid (e.g. bad fInfo) for readPixels().
+      */
+     bool trim(int srcWidth, int srcHeight);

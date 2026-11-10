@@ -1,5 +1,7 @@
 diff a/tests/PathOpsExtendedTest.cpp b/tests/PathOpsExtendedTest.cpp	(rejected hunks)
-@@ -294,9 +294,7 @@ static int comparePaths(skiatest::Reporter* reporter, const char* testName, cons
+@@ -292,13 +292,11 @@ static int comparePaths(skiatest::Reporter* reporter, const char* testName, cons
+         return 0;
+     }
      if (ExpectMatch::kYes == expectMatch && errors2x2 >= MAX_ERRORS) {
          SkAutoMutexExclusive autoM(compareDebugOut3);
          showPathOpPath(testName, one, two, a, b, scaledOne, scaledTwo, shapeOp, scale);
@@ -10,7 +12,11 @@ diff a/tests/PathOpsExtendedTest.cpp b/tests/PathOpsExtendedTest.cpp	(rejected h
      }
      return errors2x2 >= MAX_ERRORS ? errors2x2 : 0;
  }
-@@ -478,8 +476,7 @@ static bool inner_simplify(skiatest::Reporter* reporter, const SkPath& path, con
+ 
+ // Default values for when reporter->verbose() is false.
+@@ -476,12 +474,11 @@ static bool inner_simplify(skiatest::Reporter* reporter, const SkPath& path, con
+     }
+     auto out = SimplifyDebug(path  SkDEBUGPARAMS(SkipAssert::kYes == skipAssert)
                               SkDEBUGPARAMS(sTestName));
      if (!out.has_value()) {
          if (ExpectSuccess::kYes == expectSuccess) {
@@ -20,7 +26,11 @@ diff a/tests/PathOpsExtendedTest.cpp b/tests/PathOpsExtendedTest.cpp	(rejected h
          }
          if (PathOpsDebug::gJson) {
              json_status(expectSuccess, expectMatch, false);
-@@ -488,8 +485,7 @@ static bool inner_simplify(skiatest::Reporter* reporter, const SkPath& path, con
+             fprintf(PathOpsDebug::gOut, "  \"out\": \"\"\n}");
+         }
+@@ -486,12 +483,11 @@ static bool inner_simplify(skiatest::Reporter* reporter, const SkPath& path, con
+             fprintf(PathOpsDebug::gOut, "  \"out\": \"\"\n}");
+         }
          return false;
      } else {
          if (ExpectSuccess::kNo == expectSuccess) {
@@ -30,7 +40,11 @@ diff a/tests/PathOpsExtendedTest.cpp b/tests/PathOpsExtendedTest.cpp	(rejected h
          }
          if (PathOpsDebug::gJson) {
              json_status(expectSuccess, expectMatch, true);
-@@ -500,12 +496,11 @@ static bool inner_simplify(skiatest::Reporter* reporter, const SkPath& path, con
+             json_path_out(*out, "out", "Out", true);
+         }
+@@ -498,16 +494,15 @@ static bool inner_simplify(skiatest::Reporter* reporter, const SkPath& path, con
+     }
+     SkBitmap bitmap;
      int errors = comparePaths(reporter, filename, path, *out, bitmap);
      if (ExpectMatch::kNo == expectMatch) {
          if (!errors) {
@@ -45,7 +59,11 @@ diff a/tests/PathOpsExtendedTest.cpp b/tests/PathOpsExtendedTest.cpp	(rejected h
      }
      reporter->bumpTestCount();
      return errors == 0;
-@@ -553,8 +548,7 @@ static bool innerPathOp(skiatest::Reporter* reporter, const SkPath& a, const SkP
+ }
+ 
+@@ -551,12 +546,11 @@ static bool innerPathOp(skiatest::Reporter* reporter, const SkPath& a, const SkP
+ 
+     auto out = OpDebug(a, b, shapeOp  SkDEBUGPARAMS(SkipAssert::kYes == skipAssert)
                         SkDEBUGPARAMS(testName));
      if (!out.has_value()) {
          if (ExpectSuccess::kYes == expectSuccess) {
@@ -55,7 +73,11 @@ diff a/tests/PathOpsExtendedTest.cpp b/tests/PathOpsExtendedTest.cpp	(rejected h
          }
          if (PathOpsDebug::gJson) {
              json_status(expectSuccess, expectMatch, false);
-@@ -563,8 +557,7 @@ static bool innerPathOp(skiatest::Reporter* reporter, const SkPath& a, const SkP
+             fprintf(PathOpsDebug::gOut, "  \"out\": \"\"\n}");
+         }
+@@ -561,12 +555,11 @@ static bool innerPathOp(skiatest::Reporter* reporter, const SkPath& a, const SkP
+             fprintf(PathOpsDebug::gOut, "  \"out\": \"\"\n}");
+         }
          return false;
      } else {
          if (ExpectSuccess::kNo == expectSuccess) {
@@ -65,3 +87,5 @@ diff a/tests/PathOpsExtendedTest.cpp b/tests/PathOpsExtendedTest.cpp	(rejected h
          }
          if (PathOpsDebug::gJson) {
              json_status(expectSuccess, expectMatch, true);
+             json_path_out(*out, "out", "Out", true);
+         }

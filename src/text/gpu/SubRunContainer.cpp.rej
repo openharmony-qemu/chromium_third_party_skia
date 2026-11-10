@@ -1,5 +1,7 @@
 diff a/src/text/gpu/SubRunContainer.cpp b/src/text/gpu/SubRunContainer.cpp	(rejected hunks)
-@@ -759,7 +759,7 @@ public:
+@@ -757,11 +757,11 @@ public:
+     const AtlasSubRun* testingOnly_atlasSubRun() const override { return this; }
+ 
      void testingOnly_packedGlyphIDToGlyph(StrikeCache *cache,
                                            skgpu::MaskFormat maskFormat) const override {
          fGlyphs.packedGlyphIDToGlyph(cache, maskFormat);
@@ -8,3 +10,5 @@ diff a/src/text/gpu/SubRunContainer.cpp b/src/text/gpu/SubRunContainer.cpp	(reje
  
      int glyphSrcPadding() const override { return 1; }
  
+     void draw(SkCanvas*,
+               SkPoint drawOrigin,

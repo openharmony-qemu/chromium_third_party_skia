@@ -1,5 +1,7 @@
 diff a/src/image/SkSurface_Raster.cpp b/src/image/SkSurface_Raster.cpp	(rejected hunks)
-@@ -179,6 +181,24 @@ sk_sp<const SkCapabilities> SkSurface_Raster::onCapabilities() {
+@@ -177,10 +179,28 @@ sk_sp<const SkCapabilities> SkSurface_Raster::onCapabilities() {
+ 
+ sk_sp<const SkCapabilities> SkSurface_Raster::onCapabilities() {
      return SkCapabilities::RasterBackend();
  }
  
@@ -24,3 +26,5 @@ diff a/src/image/SkSurface_Raster.cpp b/src/image/SkSurface_Raster.cpp	(rejected
  SkRecorder* SkSurface_Raster::onGetBaseRecorder() const {
      return fRecorder;
  }
+ 
+ ///////////////////////////////////////////////////////////////////////////////

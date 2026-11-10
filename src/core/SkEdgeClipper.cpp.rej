@@ -1,5 +1,7 @@
 diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
-@@ -9,6 +9,7 @@
+@@ -7,10 +7,11 @@
+ 
+ #include "src/core/SkEdgeClipper.h"
  
  #include "include/core/SkRect.h"
  #include "include/core/SkTypes.h"
@@ -7,7 +9,11 @@ diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
  #include "include/private/base/SkMacros.h"
  #include "src/core/SkGeometry.h"
  #include "src/core/SkLineClipper.h"
-@@ -237,8 +238,8 @@ bool SkEdgeClipper::clipQuad(const SkPoint srcPts[3], const SkRect& clip) {
+ #include "src/core/SkPathPriv.h"
+ 
+@@ -235,12 +236,12 @@ bool SkEdgeClipper::clipQuad(const SkPoint srcPts[3], const SkRect& clip) {
+         for (int y = 0; y <= countY; y++) {
+             SkPoint monoX[5];
              int countX = SkChopQuadAtXExtrema(&monoY[y * 2], monoX);
              for (int x = 0; x <= countX; x++) {
                  this->clipMonoQuad(&monoX[x * 2], clip);
@@ -18,7 +24,11 @@ diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
              }
          }
      }
-@@ -456,6 +457,7 @@ bool SkEdgeClipper::clipCubic(const SkPoint srcPts[4], const SkRect& clip) {
+ 
+     fCurrVerbStop = fCurrVerb;
+@@ -454,10 +455,11 @@ bool SkEdgeClipper::clipCubic(const SkPoint srcPts[4], const SkRect& clip) {
+ 
+ ///////////////////////////////////////////////////////////////////////////////
  
  void SkEdgeClipper::appendLine(SkPoint p0, SkPoint p1) {
      *fCurrVerb++ = SkPathVerb::kLine;
@@ -26,7 +36,11 @@ diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
      fCurrPoint[0] = p0;
      fCurrPoint[1] = p1;
      fCurrPoint += 2;
-@@ -468,6 +470,7 @@ void SkEdgeClipper::appendVLine(SkScalar x, SkScalar y0, SkScalar y1, bool rever
+ }
+ 
+@@ -466,10 +468,11 @@ void SkEdgeClipper::appendVLine(SkScalar x, SkScalar y0, SkScalar y1, bool rever
+ 
+     if (reverse) {
          using std::swap;
          swap(y0, y1);
      }
@@ -34,7 +48,11 @@ diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
      fCurrPoint[0].set(x, y0);
      fCurrPoint[1].set(x, y1);
      fCurrPoint += 2;
-@@ -476,6 +479,7 @@ void SkEdgeClipper::appendVLine(SkScalar x, SkScalar y0, SkScalar y1, bool rever
+ }
+ 
+@@ -474,10 +477,11 @@ void SkEdgeClipper::appendVLine(SkScalar x, SkScalar y0, SkScalar y1, bool rever
+ }
+ 
  void SkEdgeClipper::appendQuad(const SkPoint pts[3], bool reverse) {
      *fCurrVerb++ = SkPathVerb::kQuad;
  
@@ -42,7 +60,11 @@ diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
      if (reverse) {
          fCurrPoint[0] = pts[2];
          fCurrPoint[2] = pts[0];
-@@ -490,6 +494,7 @@ void SkEdgeClipper::appendQuad(const SkPoint pts[3], bool reverse) {
+     } else {
+         fCurrPoint[0] = pts[0];
+@@ -488,10 +492,11 @@ void SkEdgeClipper::appendQuad(const SkPoint pts[3], bool reverse) {
+ }
+ 
  void SkEdgeClipper::appendCubic(const SkPoint pts[4], bool reverse) {
      *fCurrVerb++ = SkPathVerb::kCubic;
  
@@ -50,7 +72,11 @@ diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
      if (reverse) {
          for (int i = 0; i < 4; i++) {
              fCurrPoint[i] = pts[3 - i];
-@@ -509,14 +514,17 @@ std::optional<SkPathVerb> SkEdgeClipper::next(SkPoint pts[]) {
+         }
+     } else {
+@@ -507,18 +512,21 @@ std::optional<SkPathVerb> SkEdgeClipper::next(SkPoint pts[]) {
+     }
+ 
      auto verb = *fCurrVerb++;
      switch (verb) {
          case SkPathVerb::kLine:
@@ -68,3 +94,5 @@ diff a/src/core/SkEdgeClipper.cpp b/src/core/SkEdgeClipper.cpp	(rejected hunks)
              memcpy(pts, fCurrPoint, 4 * sizeof(SkPoint));
              fCurrPoint += 4;
              break;
+         default:
+             SkDEBUGFAIL("unexpected verb in quadclippper2 iter");

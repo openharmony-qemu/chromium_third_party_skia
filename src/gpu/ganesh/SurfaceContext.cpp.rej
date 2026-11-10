@@ -1,5 +1,7 @@
 diff a/src/gpu/ganesh/SurfaceContext.cpp b/src/gpu/ganesh/SurfaceContext.cpp	(rejected hunks)
-@@ -657,6 +657,114 @@ void SurfaceContext::asyncRescaleAndReadPixels(GrDirectContext* dContext,
+@@ -655,10 +655,118 @@ void SurfaceContext::asyncRescaleAndReadPixels(GrDirectContext* dContext,
+                                    info.colorType(),
+                                    callback,
                                     callbackContext);
  }
  
@@ -114,7 +116,11 @@ diff a/src/gpu/ganesh/SurfaceContext.cpp b/src/gpu/ganesh/SurfaceContext.cpp	(re
  void SurfaceContext::asyncReadPixels(GrDirectContext* dContext,
                                       const SkIRect& rect,
                                       SkColorType colorType,
-@@ -694,37 +802,23 @@ void SurfaceContext::asyncReadPixels(GrDirectContext* dContext,
+                                      ReadPixelsCallback callback,
+                                      ReadPixelsContext callbackContext) {
+@@ -692,41 +800,27 @@ void SurfaceContext::asyncReadPixels(GrDirectContext* dContext,
+         }
+         callback(callbackContext, std::move(result));
          return;
      }
  
@@ -165,7 +171,11 @@ diff a/src/gpu/ganesh/SurfaceContext.cpp b/src/gpu/ganesh/SurfaceContext.cpp	(re
  
      dContext->priv().flushSurface(
              this->asSurfaceProxy(), SkSurfaces::BackendSurfaceAccess::kNoAccess, flushInfo);
-@@ -964,71 +1058,27 @@ void SurfaceContext::asyncRescaleAndReadPixelsYUV420(GrDirectContext* dContext,
+ }
+ 
+@@ -962,75 +1056,31 @@ void SurfaceContext::asyncRescaleAndReadPixelsYUV420(GrDirectContext* dContext,
+         }
+         callback(callbackContext, std::move(result));
          return;
      }
  
@@ -254,3 +264,5 @@ diff a/src/gpu/ganesh/SurfaceContext.cpp b/src/gpu/ganesh/SurfaceContext.cpp	(re
      dContext->priv().flushSurface(
              this->asSurfaceProxy(), SkSurfaces::BackendSurfaceAccess::kNoAccess, flushInfo);
  }
+ 
+ sk_sp<GrRenderTask> SurfaceContext::copy(sk_sp<GrSurfaceProxy> src,

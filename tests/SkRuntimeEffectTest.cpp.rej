@@ -1,5 +1,7 @@
 diff a/tests/SkRuntimeEffectTest.cpp b/tests/SkRuntimeEffectTest.cpp	(rejected hunks)
-@@ -1795,3 +1795,45 @@ DEF_GANESH_TEST_FOR_RENDERING_CONTEXTS(GrSkSLFP_UniformArray,
+@@ -1793,5 +1793,47 @@ DEF_GANESH_TEST_FOR_RENDERING_CONTEXTS(GrSkSLFP_UniformArray,
+             break;
+         }
      }
  }
  #endif

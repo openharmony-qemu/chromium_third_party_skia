@@ -1,5 +1,7 @@
 diff a/src/core/SkCanvasPriv.cpp b/src/core/SkCanvasPriv.cpp	(rejected hunks)
-@@ -25,6 +25,7 @@
+@@ -23,10 +23,11 @@
+ #include "src/core/SkMaskFilterBase.h"
+ #include "src/core/SkReadBuffer.h"
  #include "src/core/SkWriteBuffer.h"
  #include "src/core/SkWriter32.h"
  
@@ -7,7 +9,11 @@ diff a/src/core/SkCanvasPriv.cpp b/src/core/SkCanvasPriv.cpp	(rejected hunks)
  #include <utility>
  #include <cstdint>
  
-@@ -55,13 +56,25 @@ SkAutoCanvasMatrixPaint::~SkAutoCanvasMatrixPaint() {
+ SkAutoCanvasMatrixPaint::SkAutoCanvasMatrixPaint(SkCanvas* canvas, const SkMatrix* matrix,
+                                                  const SkPaint* paint, const SkRect& bounds)
+@@ -53,17 +54,29 @@ SkAutoCanvasMatrixPaint::~SkAutoCanvasMatrixPaint() {
+ 
+ ///////////////////////////////////////////////////////////////////////////////////////////////////
  
  bool SkCanvasPriv::ReadLattice(SkReadBuffer& buffer, SkCanvas::Lattice* lattice) {
      lattice->fXCount = buffer.readInt();
@@ -33,3 +39,5 @@ diff a/src/core/SkCanvasPriv.cpp b/src/core/SkCanvasPriv.cpp	(rejected hunks)
          lattice->fRectTypes = buffer.skipT<SkCanvas::Lattice::RectType>(flagCount);
          lattice->fColors = buffer.skipT<SkColor>(flagCount);
      }
+     lattice->fBounds = buffer.skipT<SkIRect>();
+     return buffer.isValid();

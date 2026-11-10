@@ -1,5 +1,7 @@
 diff a/include/core/SkSerialProcs.h b/include/core/SkSerialProcs.h	(rejected hunks)
-@@ -8,6 +8,7 @@
+@@ -6,10 +6,11 @@
+  */
+ 
  #ifndef SkSerialProcs_DEFINED
  #define SkSerialProcs_DEFINED
  
@@ -7,7 +9,11 @@ diff a/include/core/SkSerialProcs.h b/include/core/SkSerialProcs.h	(rejected hun
  #include "include/core/SkRefCnt.h"
  #include "include/private/base/SkAPI.h"
  
-@@ -87,6 +88,8 @@ using SkSlugProc = sk_sp<sktext::gpu::Slug> (*)(SkReadBuffer&, void* ctx);
+ #include <cstddef>
+ #include <optional>
+@@ -85,10 +86,12 @@ using SkSlugProc = sk_sp<sktext::gpu::Slug> (*)(SkReadBuffer&, void* ctx);
+  *  Called with the encoded form of a typeface (previously written with a custom
+  *  SkSerialTypefaceProc proc). Return a typeface object, or nullptr indicating failure.
   */
  using SkDeserialTypefaceProc = sk_sp<SkTypeface> (*)(const void* data, size_t length, void* ctx);
  
@@ -16,7 +22,11 @@ diff a/include/core/SkSerialProcs.h b/include/core/SkSerialProcs.h	(rejected hun
  struct SK_API SkSerialProcs {
      SkSerialPictureProc fPictureProc = nullptr;
      void*               fPictureCtx = nullptr;
-@@ -116,6 +119,10 @@ struct SK_API SkDeserialProcs {
+ 
+     SkSerialImageProc   fImageProc = nullptr;
+@@ -114,8 +117,12 @@ struct SK_API SkDeserialProcs {
+ 
+     // This looks like a flag, but it could be considered a proc as well (one that takes no
      // parameters and returns a bool). Given that there are only two valid implementations of that
      // proc, we just insert the bool directly.
      bool                         fAllowSkSL = true;

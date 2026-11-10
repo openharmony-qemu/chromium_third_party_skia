@@ -1,5 +1,7 @@
 diff a/src/sksl/sksl_rt_shader.sksl b/src/sksl/sksl_rt_shader.sksl	(rejected hunks)
-@@ -22,7 +22,7 @@ half4 sk_displacement(shader displMap,
+@@ -20,11 +20,11 @@ half4 sk_displacement(shader displMap,
+                       shader colorMap,
+                       float2 coord,
                        half2 scale,
                        half4 xSelect,  // Only one of RGBA will be 1, the rest are 0
                        half4 ySelect) {
@@ -8,3 +10,5 @@ diff a/src/sksl/sksl_rt_shader.sksl b/src/sksl/sksl_rt_shader.sksl	(rejected hun
      half2 displ = half2(dot(displColor, xSelect), dot(displColor, ySelect));
      displ = scale * (displ - 0.5);
      return colorMap.eval(coord + displ);
+ }
+ 

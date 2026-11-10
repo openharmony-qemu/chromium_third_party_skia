@@ -1,5 +1,7 @@
 diff a/src/gpu/ganesh/GrVertexChunkArray.cpp b/src/gpu/ganesh/GrVertexChunkArray.cpp	(rejected hunks)
-@@ -10,6 +10,7 @@
+@@ -8,10 +8,11 @@
+ #include "src/gpu/ganesh/GrVertexChunkArray.h"
+ 
  #include "src/gpu/ganesh/GrMeshDrawTarget.h"
  
  #include <algorithm>
@@ -7,7 +9,11 @@ diff a/src/gpu/ganesh/GrVertexChunkArray.cpp b/src/gpu/ganesh/GrVertexChunkArray
  
  GrVertexChunkBuilder::~GrVertexChunkBuilder() {
      if (!fChunks->empty()) {
-@@ -37,6 +38,11 @@ bool GrVertexChunkBuilder::allocChunk(int minCount) {
+         fTarget->putBackVertices(fCurrChunkVertexCapacity - fCurrChunkVertexCount, fStride);
+         fChunks->back().fCount = fCurrChunkVertexCount;
+@@ -35,8 +36,13 @@ bool GrVertexChunkBuilder::allocChunk(int minCount) {
+         fChunks->pop_back();
+         SkASSERT(fCurrChunkVertexCount == 0);
          fCurrChunkVertexCapacity = 0;
          return false;
      }

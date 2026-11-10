@@ -1,5 +1,7 @@
 diff a/src/gpu/ganesh/ops/AtlasTextOp.cpp b/src/gpu/ganesh/ops/AtlasTextOp.cpp	(rejected hunks)
-@@ -473,8 +473,12 @@ void AtlasTextOp::onPrepareDraws(GrMeshDrawTarget* target) {
+@@ -471,12 +471,16 @@ void AtlasTextOp::onPrepareDraws(GrMeshDrawTarget* target) {
+                                                               *target->caps().shaderCaps(),
+                                                               localMatrix, views, numActiveViews);
      } else
  #endif
      {
@@ -14,7 +16,11 @@ diff a/src/gpu/ganesh/ops/AtlasTextOp.cpp b/src/gpu/ganesh/ops/AtlasTextOp.cpp	(
          // Bitmap text uses a single color, combineIfPossible ensures all geometries have the same
          // color, so we can use the first's without worry.
          flushInfo.fGeometryProcessor = GrBitmapTextGeoProc::Make(
-@@ -620,8 +624,9 @@ void AtlasTextOp::createDrawForGeneratedGlyphs(GrMeshDrawTarget* target,
+                 target->allocator(), *target->caps().shaderCaps(), fHead->fColor,
+                 /*wideColor=*/false, fColorSpaceXform, views, numActiveViews, filter,
+@@ -618,12 +622,13 @@ void AtlasTextOp::createDrawForGeneratedGlyphs(GrMeshDrawTarget* target,
+                         views, numActiveViews, GrSamplerState::Filter::kLinear);
+             }
          } else
  #endif
          {
@@ -26,3 +32,5 @@ diff a/src/gpu/ganesh/ops/AtlasTextOp.cpp b/src/gpu/ganesh/ops/AtlasTextOp.cpp	(
              reinterpret_cast<GrBitmapTextGeoProc*>(gp)->addNewViews(views, numActiveViews, filter);
          }
      }
+     int maxGlyphsPerDraw = static_cast<int>(flushInfo->fIndexBuffer->size() / sizeof(uint16_t) / 6);
+     GrSimpleMesh* mesh = target->allocMesh();
