@@ -14,6 +14,8 @@
 #include "include/core/SkTypes.h"
 
 #include <memory>
+#include <vector>
+#include "arkweb/build/features/features.h"
 
 class SkData;
 class SkFontStyle;
@@ -145,6 +147,12 @@ public:
 
     sk_sp<SkTypeface> legacyMakeTypeface(const char familyName[], SkFontStyle style) const;
 
+#if BUILDFLAG(ARKWEB_THEME_FONT)
+    void InvalidateThemeFont(const std::vector<int>& fds);
+#endif
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    void PrepareFontConfig();
+#endif
     /* Returns an empty font manager without any typeface dependencies */
     static sk_sp<SkFontMgr> RefEmpty();
 
@@ -173,6 +181,13 @@ protected:
     virtual sk_sp<SkTypeface> onMakeFromFile(const char path[], int ttcIndex) const = 0;
 
     virtual sk_sp<SkTypeface> onLegacyMakeTypeface(const char familyName[], SkFontStyle) const = 0;
+
+#if BUILDFLAG(ARKWEB_THEME_FONT)
+    virtual void onInvalidateThemeFont(const std::vector<int>& fds) = 0;
+#endif
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    virtual void onPrepareFontConfig() = 0;
+#endif
 };
 
 #endif

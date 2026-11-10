@@ -32,6 +32,8 @@
 #include <cstring>
 #include <utility>
 
+#include "arkweb/build/features/features.h"
+
 using namespace skia_private;
 
 template <typename T> int SafeCount(const T* obj) {

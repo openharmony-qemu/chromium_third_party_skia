@@ -1,0 +1,10 @@
+diff a/src/text/gpu/SubRunContainer.cpp b/src/text/gpu/SubRunContainer.cpp	(rejected hunks)
+@@ -759,7 +759,7 @@ public:
+     void testingOnly_packedGlyphIDToGlyph(StrikeCache *cache,
+                                           skgpu::MaskFormat maskFormat) const override {
+         fGlyphs.packedGlyphIDToGlyph(cache, maskFormat);
+-     }
++    }
+ 
+     int glyphSrcPadding() const override { return 1; }
+ 

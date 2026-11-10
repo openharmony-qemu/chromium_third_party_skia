@@ -1,0 +1,9 @@
+diff a/src/sksl/codegen/SkSLGLSLCodeGenerator.cpp b/src/sksl/codegen/SkSLGLSLCodeGenerator.cpp	(rejected hunks)
+@@ -74,6 +74,7 @@
+ #include "src/sksl/ir/SkSLVariable.h"
+ #include "src/sksl/ir/SkSLVariableReference.h"
+ #include "src/sksl/spirv.h"
++#include "arkweb/build/features/features.h"
+ 
+ #include <cstddef>
+ #include <cstdint>

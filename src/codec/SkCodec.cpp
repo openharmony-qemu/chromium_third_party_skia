@@ -7,6 +7,7 @@
 
 #include "include/codec/SkCodec.h"
 
+#include "arkweb/build/features/features.h"
 #include "include/codec/SkCodecAnimation.h"
 #include "include/codec/SkPixmapUtils.h"
 #include "include/core/SkAlphaType.h"
@@ -78,17 +79,17 @@
 #include "include/codec/SkWbmpDecoder.h"
 #endif
 
-#if defined(SK_CODEC_DECODES_WEBP)
+// #if defined(SK_CODEC_DECODES_WEBP)
 #include "include/codec/SkWebpDecoder.h"
-#endif
-#endif // !defined(SK_DISABLE_LEGACY_INIT_DECODERS)
+// #endif
+// #endif // !defined(SK_DISABLE_LEGACY_INIT_DECODERS)
 
 namespace SkCodecs {
 // A static variable inside a function avoids a static initializer.
 // https://chromium.googlesource.com/chromium/src/+/HEAD/docs/static_initializers.md#removing-static-initializers
 static std::vector<Decoder>* get_decoders_for_editing() {
     static SkNoDestructor<std::vector<Decoder>> decoders;
-#if !defined(SK_DISABLE_LEGACY_INIT_DECODERS)
+// #if !defined(SK_DISABLE_LEGACY_INIT_DECODERS)
     static SkOnce once;
     once([] {
         if (decoders->empty()) {
@@ -137,7 +138,7 @@ static std::vector<Decoder>* get_decoders_for_editing() {
 #endif
         }
     });
-#endif // !defined(SK_DISABLE_LEGACY_INIT_DECODERS)
+// #endif // !defined(SK_DISABLE_LEGACY_INIT_DECODERS)
     return decoders.get();
 }
 

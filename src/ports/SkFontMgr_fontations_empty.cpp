@@ -74,6 +74,12 @@ protected:
                                            SkFontStyle style) const override {
         return nullptr;
     }
+#if BUILDFLAG(ARKWEB_THEME_FONT)
+    void onInvalidateThemeFont(const std::vector<int>& fds) override {}
+#endif
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    void onPrepareFontConfig() override {}
+#endif
 };
 
 }  // namespace
