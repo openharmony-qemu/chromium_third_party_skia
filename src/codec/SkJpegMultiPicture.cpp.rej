@@ -1,5 +1,7 @@
 diff a/src/codec/SkJpegMultiPicture.cpp b/src/codec/SkJpegMultiPicture.cpp	(rejected hunks)
-@@ -129,8 +129,8 @@ std::unique_ptr<SkJpegMultiPictureParameters> SkJpegMultiPictureParameters::Make
+@@ -127,12 +127,12 @@ std::unique_ptr<SkJpegMultiPictureParameters> SkJpegMultiPictureParameters::Make
+                 if (!mpEntriesData) {
+                     SkCodecPrintf("MP entries data could not be extracted.\n");
                      return nullptr;
                  }
                  SkSafeMath expectedSizeSafe;
@@ -10,7 +12,11 @@ diff a/src/codec/SkJpegMultiPicture.cpp b/src/codec/SkJpegMultiPicture.cpp	(reje
                      SkCodecPrintf("MP entries data should be %ux%u bytes, was %u.\n",
                                    kMPEntrySize,
                                    numberOfImages,
-@@ -182,10 +182,14 @@ std::unique_ptr<SkJpegMultiPictureParameters> SkJpegMultiPictureParameters::Make
+                                   static_cast<uint32_t>(mpEntriesData->size()));
+                     return nullptr;
+@@ -180,14 +180,18 @@ std::unique_ptr<SkJpegMultiPictureParameters> SkJpegMultiPictureParameters::Make
+ 
+     // The next IFD is the Attribute IFD offset. We will not read or validate the Attribute IFD.
  
      // Parse the MP Entries data.
      for (uint32_t i = 0; i < numberOfImages; ++i) {
@@ -29,3 +35,5 @@ diff a/src/codec/SkJpegMultiPicture.cpp b/src/codec/SkJpegMultiPicture.cpp	(reje
  
          const bool isPrimary =
                  (attribute & kMPEntryAttributeTypeMask) == kMPEntryAttributeTypePrimary;
+         const bool isJpeg =
+                 (attribute & kMPEntryAttributeFormatMask) == kMPEntryAttributeFormatJpeg;

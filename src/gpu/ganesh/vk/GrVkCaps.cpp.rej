@@ -1,5 +1,7 @@
 diff a/src/gpu/ganesh/vk/GrVkCaps.cpp b/src/gpu/ganesh/vk/GrVkCaps.cpp	(rejected hunks)
-@@ -551,7 +564,11 @@ void GrVkCaps::applyDriverCorrectnessWorkarounds(const VkPhysicalDevicePropertie
+@@ -549,11 +562,15 @@ void GrVkCaps::applyDriverCorrectnessWorkarounds(const VkPhysicalDevicePropertie
+     // msaa image into the resolve image.
+     // This also occurs on swiftshader: b/303705884
      if (properties.vendorID == skgpu::kQualcomm_VkVendor ||
          properties.vendorID == skgpu::kARM_VkVendor ||
          (properties.vendorID == skgpu::kGoogle_VkVendor &&
@@ -12,3 +14,5 @@ diff a/src/gpu/ganesh/vk/GrVkCaps.cpp b/src/gpu/ganesh/vk/GrVkCaps.cpp	(rejected
          fMustLoadFullImageWithDiscardableMSAA = true;
      }
  
+     // There seems to be bug in swiftshader when we reuse scratch buffers for uploads. We end up
+     // with very slight pixel diffs. For example:

@@ -1,5 +1,7 @@
 diff a/src/codec/SkCodec.cpp b/src/codec/SkCodec.cpp	(rejected hunks)
-@@ -31,28 +32,28 @@
+@@ -29,32 +30,32 @@
+ 
+ #include <string>
  #include <string_view>
  #include <utility>
  
@@ -35,7 +37,11 @@ diff a/src/codec/SkCodec.cpp b/src/codec/SkCodec.cpp	(rejected hunks)
  
  #if defined(SK_CODEC_DECODES_JPEGXL)
  #include "include/codec/SkJpegxlDecoder.h"
-@@ -91,21 +92,21 @@ static std::vector<Decoder>* get_decoders_for_editing() {
+ #endif
+ 
+@@ -89,25 +90,25 @@ static std::vector<Decoder>* get_decoders_for_editing() {
+ #if defined(SK_CODEC_DECODES_PNG_WITH_LIBPNG)
+             decoders->push_back(SkPngDecoder::Decoder());
  #elif defined(SK_CODEC_DECODES_PNG_WITH_RUST)
              decoders->push_back(SkPngRustDecoder::Decoder());
  #endif
@@ -65,3 +71,5 @@ diff a/src/codec/SkCodec.cpp b/src/codec/SkCodec.cpp	(rejected hunks)
  #if defined(SK_CODEC_DECODES_WBMP)
              decoders->push_back(SkWbmpDecoder::Decoder());
  #endif
+ #if defined(SK_CODEC_DECODES_AVIF)
+ #if defined(SK_BUILD_FOR_ANDROID_FRAMEWORK)

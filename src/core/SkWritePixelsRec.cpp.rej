@@ -1,5 +1,7 @@
 diff a/src/core/SkWritePixelsRec.cpp b/src/core/SkWritePixelsRec.cpp	(rejected hunks)
-@@ -8,14 +8,21 @@
+@@ -6,18 +6,25 @@
+  */
+ 
  #include "src/core/SkWritePixelsRec.h"
  
  #include "include/core/SkRect.h"
@@ -22,7 +24,11 @@ diff a/src/core/SkWritePixelsRec.cpp b/src/core/SkWritePixelsRec.cpp	(rejected h
  
      int x = fX;
      int y = fY;
-@@ -31,9 +38,17 @@ bool SkWritePixelsRec::trim(int dstWidth, int dstHeight) {
+     SkIRect dstR = SkIRect::MakeXYWH(x, y, fInfo.width(), fInfo.height());
+     if (!dstR.intersect({0, 0, dstWidth, dstHeight})) {
+@@ -29,13 +36,21 @@ bool SkWritePixelsRec::trim(int dstWidth, int dstHeight) {
+         x = 0;
+     }
      if (y > 0) {
          y = 0;
      }
@@ -42,3 +48,5 @@ diff a/src/core/SkWritePixelsRec.cpp b/src/core/SkWritePixelsRec.cpp	(rejected h
      // the intersect may have shrunk info's logical size
      fInfo = fInfo.makeDimensions(dstR.size());
      fX = dstR.x();
+     fY = dstR.y();
+ 

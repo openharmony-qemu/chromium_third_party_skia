@@ -1,5 +1,7 @@
 diff a/src/sksl/generated/sksl_rt_shader.unoptimized.sksl b/src/sksl/generated/sksl_rt_shader.unoptimized.sksl	(rejected hunks)
-@@ -4,72 +4,73 @@ static constexpr char SKSL_MINIFIED_sksl_rt_shader[] =
+@@ -2,74 +2,75 @@ static constexpr char SKSL_MINIFIED_sksl_rt_shader[] =
+ "layout(builtin=15)float4 sk_FragCoord;half4 sk_luma(half3 color){return half4"
+ "(0.,0.,0.,saturate(dot(half3(.2126,.7152,.0722),color)));}half4 sk_decal(shader"
  " image,float2 coord,float4 decalBounds){half4 d=half4(decalBounds-coord.xyxy"
  ")*half4(-1.,-1.,1.,1.);d=saturate(d+.5);return(((d.x*d.y)*d.z)*d.w)*image.eval"
  "(coord);}half4 sk_displacement(shader displMap,shader colorMap,float2 coord"

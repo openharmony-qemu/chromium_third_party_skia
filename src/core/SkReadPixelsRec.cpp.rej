@@ -1,5 +1,7 @@
 diff a/src/core/SkReadPixelsRec.cpp b/src/core/SkReadPixelsRec.cpp	(rejected hunks)
-@@ -7,15 +7,22 @@
+@@ -5,19 +5,26 @@
+  * found in the LICENSE file.
+  */
  #include "src/core/SkReadPixelsRec.h"
  
  #include "include/core/SkRect.h"
@@ -24,7 +26,11 @@ diff a/src/core/SkReadPixelsRec.cpp b/src/core/SkReadPixelsRec.cpp	(rejected hun
      int x = fX;
      int y = fY;
      SkIRect srcR = SkIRect::MakeXYWH(x, y, fInfo.width(), fInfo.height());
-@@ -30,9 +37,17 @@ bool SkReadPixelsRec::trim(int srcWidth, int srcHeight) {
+     if (!srcR.intersect({0, 0, srcWidth, srcHeight})) {
+         return false;
+@@ -28,13 +35,21 @@ bool SkReadPixelsRec::trim(int srcWidth, int srcHeight) {
+         x = 0;
+     }
      if (y > 0) {
          y = 0;
      }
@@ -44,3 +50,5 @@ diff a/src/core/SkReadPixelsRec.cpp b/src/core/SkReadPixelsRec.cpp	(rejected hun
      // the intersect may have shrunk info's logical size
      fInfo = fInfo.makeDimensions(srcR.size());
      fX = srcR.x();
+     fY = srcR.y();
+ 

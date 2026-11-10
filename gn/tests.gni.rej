@@ -1,5 +1,7 @@
 diff a/gn/tests.gni b/gn/tests.gni	(rejected hunks)
-@@ -422,12 +422,12 @@ pathops_tests_sources = [
+@@ -420,16 +420,16 @@ pathops_tests_sources = [
+   "$_tests/PathOpsTypesTest.cpp",
+   "$_tests/WangsFormulaTest.cpp",
  ]
  
  ganesh_tests_sources = [
@@ -13,3 +15,5 @@ diff a/gn/tests.gni b/gn/tests.gni	(rejected hunks)
    "$_tests/BulkRectTest.cpp",
    "$_tests/ClearTest.cpp",
    "$_tests/CompressedBackendAllocationTest.cpp",
+   "$_tests/CopySurfaceTest.cpp",
+   "$_tests/DMSAATest.cpp",

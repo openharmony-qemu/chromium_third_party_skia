@@ -1,5 +1,7 @@
 diff a/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp b/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp	(rejected hunks)
-@@ -387,7 +387,7 @@ void Builder::discard_stack(int32_t count, int stackID) {
+@@ -385,11 +385,11 @@ void Builder::discard_stack(int32_t count, int stackID) {
+                 continue;
+ 
              case BuilderOp::copy_stack_to_slots_unmasked: {
                  // Look for a pattern of `push, immediate-ops, pop` and simplify it down to an
                  // immediate-op directly to the value slot.
@@ -8,7 +10,11 @@ diff a/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp b/src/sksl/codegen/SkSLRas
                      if (this->simplifyImmediateUnmaskedOp()) {
                          return;
                      }
-@@ -1374,7 +1374,7 @@ Program::StackDepths Program::tempStackMaxDepths() const {
+                 }
+ 
+@@ -1372,11 +1372,11 @@ Program::StackDepths Program::tempStackMaxDepths() const {
+     for (const Instruction& inst : fInstructions) {
+         int stackID = inst.fStackID;
          current[stackID] += stack_usage(inst);
          largest[stackID] = std::max(current[stackID], largest[stackID]);
          // If we assert here, the generated program has popped off the top of the stack.
@@ -17,3 +23,5 @@ diff a/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp b/src/sksl/codegen/SkSLRas
      }
  
      // Ensure that when the program is complete, our stacks are fully balanced.
+     for (int stackID = 0; stackID < numStacks; ++stackID) {
+         // If we assert here, the generated program has pushed more data than it has popped.

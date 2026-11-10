@@ -1,5 +1,7 @@
 diff a/src/core/SkDebugUtils.h b/src/core/SkDebugUtils.h	(rejected hunks)
-@@ -8,6 +8,7 @@
+@@ -6,10 +6,11 @@
+  */
+ 
  #ifndef SkDebugUtils_DEFINED
  #define SkDebugUtils_DEFINED
  
@@ -7,7 +9,11 @@ diff a/src/core/SkDebugUtils.h b/src/core/SkDebugUtils.h	(rejected hunks)
  #include "include/core/SkTileMode.h"
  #include "include/private/base/SkAssert.h"
  #include "include/private/base/SkDebug.h"
-@@ -51,5 +52,9 @@ inline void SkDumpBuffer(uint8_t const* const buffer, int w, int h, int rowBytes
+ 
+ #include <array>
+@@ -49,7 +50,11 @@ inline void SkDumpBuffer(uint8_t const* const buffer, int w, int h, int rowBytes
+ }
+ #else
  inline void SkDumpBuffer(uint8_t*, int, int, int) {}
  #endif
  

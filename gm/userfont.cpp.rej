@@ -1,5 +1,7 @@
 diff a/gm/userfont.cpp b/gm/userfont.cpp	(rejected hunks)
-@@ -15,11 +15,13 @@
+@@ -13,15 +13,17 @@
+ #include "include/core/SkPath.h"
+ #include "include/core/SkPictureRecorder.h"
  #include "include/core/SkSize.h"
  #include "include/core/SkStream.h"
  #include "include/core/SkString.h"
@@ -13,7 +15,11 @@ diff a/gm/userfont.cpp b/gm/userfont.cpp	(rejected hunks)
  static sk_sp<SkDrawable> make_drawable(const SkPath& path) {
      const auto bounds = path.computeTightBounds();
  
-@@ -73,8 +75,6 @@ static sk_sp<SkTypeface> make_tf() {
+     SkPictureRecorder recorder;
+     auto* canvas = recorder.beginRecording(bounds);
+@@ -71,12 +73,10 @@ static sk_sp<SkTypeface> make_tf() {
+     }
+ 
      return builder.detach();
  }
  
@@ -22,7 +28,11 @@ diff a/gm/userfont.cpp b/gm/userfont.cpp	(rejected hunks)
  static sk_sp<SkTypeface> round_trip(sk_sp<SkTypeface> tf) {
      auto data = tf->serialize();
      SkMemoryStream stream(data->data(), data->size());
-@@ -90,9 +90,8 @@ public:
+     sk_sp<SkTypeface> face = SkTypeface::MakeDeserialize(&stream, nullptr);
+     SkASSERT(face);
+@@ -88,13 +88,12 @@ public:
+ 
+ public:
      UserFontGM() {}
  
      void onOnceBeforeDraw() override {
@@ -33,3 +43,5 @@ diff a/gm/userfont.cpp b/gm/userfont.cpp	(rejected hunks)
      }
  
      static sk_sp<SkTextBlob> make_blob(sk_sp<SkTypeface> tf, float size, float* spacing) {
+         SkFont font(tf);
+         font.setSize(size);

@@ -1,5 +1,7 @@
 diff a/src/core/SkReadBuffer.h b/src/core/SkReadBuffer.h	(rejected hunks)
-@@ -11,6 +11,7 @@
+@@ -9,10 +9,11 @@
+ #define SkReadBuffer_DEFINED
+ 
  #include "include/core/SkColor.h"
  #include "include/core/SkColorFilter.h"
  #include "include/core/SkFlattenable.h"
@@ -7,7 +9,11 @@ diff a/src/core/SkReadBuffer.h b/src/core/SkReadBuffer.h	(rejected hunks)
  #include "include/core/SkImageFilter.h"
  #include "include/core/SkPaint.h"
  #include "include/core/SkPathEffect.h"
-@@ -186,6 +187,13 @@ public:
+ #include "include/core/SkPoint.h"
+ #include "include/core/SkRect.h"
+@@ -184,10 +185,17 @@ public:
+     const SkDeserialProcs& getDeserialProcs() const { return fProcs; }
+ 
      bool allowSkSL() const { return fAllowSkSL; }
      void setAllowSkSL(bool allow) { fAllowSkSL = allow; }
  
@@ -21,3 +27,5 @@ diff a/src/core/SkReadBuffer.h b/src/core/SkReadBuffer.h	(rejected hunks)
      /**
       *  If isValid is false, sets the buffer to be "invalid". Returns true if the buffer
       *  is still valid.
+      */
+     bool validate(bool isValid) {

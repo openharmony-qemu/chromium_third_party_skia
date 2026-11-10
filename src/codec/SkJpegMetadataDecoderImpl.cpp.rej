@@ -1,5 +1,7 @@
 diff a/src/codec/SkJpegMetadataDecoderImpl.cpp b/src/codec/SkJpegMetadataDecoderImpl.cpp	(rejected hunks)
-@@ -7,10 +7,14 @@
+@@ -5,14 +5,18 @@
+  * found in the LICENSE file.
+  */
  
  #include "src/codec/SkJpegMetadataDecoderImpl.h"
  
@@ -14,3 +16,5 @@ diff a/src/codec/SkJpegMetadataDecoderImpl.cpp b/src/codec/SkJpegMetadataDecoder
  
  #include <cstdint>
  #include <cstring>
+ #include <memory>
+ #include <utility>

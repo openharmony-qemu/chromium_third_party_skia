@@ -1,5 +1,7 @@
 diff a/tests/PathOpsSimplifyTest.cpp b/tests/PathOpsSimplifyTest.cpp	(rejected hunks)
-@@ -9985,3 +9985,31 @@ DEF_TEST(PathOpsSimplify, reporter) {
+@@ -9983,5 +9983,33 @@ DEF_TEST(PathOpsSimplify, reporter) {
+     RunTestSet(reporter, tests, testCount, firstTest, skipTest, stopTest, runReverse);
+     if (runSubTests && !runSubTestsFirst) {
          RunTestSet(reporter, subTests, subTestCount, firstSubTest, nullptr, stopTest, runReverse);
      }
  }

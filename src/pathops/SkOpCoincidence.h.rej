@@ -1,5 +1,7 @@
 diff a/src/pathops/SkOpCoincidence.h b/src/pathops/SkOpCoincidence.h	(rejected hunks)
-@@ -282,13 +282,13 @@ private:
+@@ -280,17 +280,17 @@ private:
+     void debugAddEndMovedSpans(SkPathOpsDebug::GlitchLog* ,
+                                const SkOpSpan* base, const SkOpSpanBase* testSpan) const;
      void debugAddEndMovedSpans(SkPathOpsDebug::GlitchLog* ,
                                 const SkOpPtT* ptT) const;
  #endif
@@ -17,3 +19,5 @@ diff a/src/pathops/SkOpCoincidence.h b/src/pathops/SkOpCoincidence.h	(rejected h
      void restoreHead();
      // return coinPtT->segment()->t mapped from overS->fT <= t <= overE->fT
      static double TRange(const SkOpPtT* overS, double t, const SkOpSegment* coinPtT
+                          SkDEBUGPARAMS(const SkOpPtT* overE));
+ 
