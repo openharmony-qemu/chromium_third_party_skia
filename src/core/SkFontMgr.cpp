@@ -83,6 +83,13 @@ protected:
     sk_sp<SkTypeface> onLegacyMakeTypeface(const char [], SkFontStyle) const override {
         return nullptr;
     }
+
+#if BUILDFLAG(ARKWEB_THEME_FONT)
+    void onInvalidateThemeFont(const std::vector<int>& fds) override {}
+#endif
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    void onPrepareFontConfig() override {}
+#endif
 };
 
 static sk_sp<SkFontStyleSet> emptyOnNull(sk_sp<SkFontStyleSet>&& fsset) {
@@ -208,6 +215,18 @@ sk_sp<SkTypeface> SkFontMgr::makeFromFile(const char path[], int ttcIndex) const
 sk_sp<SkTypeface> SkFontMgr::legacyMakeTypeface(const char familyName[], SkFontStyle style) const {
     return this->onLegacyMakeTypeface(familyName, style);
 }
+
+#if BUILDFLAG(ARKWEB_THEME_FONT)
+void SkFontMgr::InvalidateThemeFont(const std::vector<int>& fds) {
+    this->onInvalidateThemeFont(fds);
+}
+#endif
+
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+void SkFontMgr::PrepareFontConfig() {
+    this->onPrepareFontConfig();
+}
+#endif
 
 sk_sp<SkFontMgr> SkFontMgr::RefEmpty() {
     static SkFontMgr* singleton = new SkEmptyFontMgr();

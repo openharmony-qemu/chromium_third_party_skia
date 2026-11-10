@@ -1,0 +1,14 @@
+diff a/src/gpu/ganesh/vk/GrVkCaps.cpp b/src/gpu/ganesh/vk/GrVkCaps.cpp	(rejected hunks)
+@@ -551,7 +564,11 @@ void GrVkCaps::applyDriverCorrectnessWorkarounds(const VkPhysicalDevicePropertie
+     if (properties.vendorID == skgpu::kQualcomm_VkVendor ||
+         properties.vendorID == skgpu::kARM_VkVendor ||
+         (properties.vendorID == skgpu::kGoogle_VkVendor &&
+-         properties.deviceID == kSwiftshader_DeviceID)) {
++         properties.deviceID == kSwiftshader_DeviceID)
++#if BUILDFLAG(ARKWEB_VULKAN)
++        || properties.vendorID == skgpu::kHisi_VkVendor
++#endif
++        ) {
+         fMustLoadFullImageWithDiscardableMSAA = true;
+     }
+ 

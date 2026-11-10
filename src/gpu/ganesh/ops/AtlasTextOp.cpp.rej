@@ -1,0 +1,28 @@
+diff a/src/gpu/ganesh/ops/AtlasTextOp.cpp b/src/gpu/ganesh/ops/AtlasTextOp.cpp	(rejected hunks)
+@@ -473,8 +473,12 @@ void AtlasTextOp::onPrepareDraws(GrMeshDrawTarget* target) {
+     } else
+ #endif
+     {
+-        auto filter = fNeedsGlyphTransform ? GrSamplerState::Filter::kLinear
+-                                           : GrSamplerState::Filter::kNearest;
++        // Only use linear padding if the glyphs were also padded for it. If we somehow get a direct
++        // subrun with a corrupted transform, we should still use nearest neighbor since it was
++        // packed tightly.
++        const bool hasGlyphPadding = fHead->fSubRun.glyphSrcPadding() > 0;
++        auto filter = fNeedsGlyphTransform && hasGlyphPadding ? GrSamplerState::Filter::kLinear
++                                                              : GrSamplerState::Filter::kNearest;
+         // Bitmap text uses a single color, combineIfPossible ensures all geometries have the same
+         // color, so we can use the first's without worry.
+         flushInfo.fGeometryProcessor = GrBitmapTextGeoProc::Make(
+@@ -620,8 +624,9 @@ void AtlasTextOp::createDrawForGeneratedGlyphs(GrMeshDrawTarget* target,
+         } else
+ #endif
+         {
+-            auto filter = fNeedsGlyphTransform ? GrSamplerState::Filter::kLinear
+-                                               : GrSamplerState::Filter::kNearest;
++            const bool hasGlyphPadding = fHead->fSubRun.glyphSrcPadding() > 0;
++            auto filter = fNeedsGlyphTransform && hasGlyphPadding
++                    ? GrSamplerState::Filter::kLinear : GrSamplerState::Filter::kNearest;
+             reinterpret_cast<GrBitmapTextGeoProc*>(gp)->addNewViews(views, numActiveViews, filter);
+         }
+     }

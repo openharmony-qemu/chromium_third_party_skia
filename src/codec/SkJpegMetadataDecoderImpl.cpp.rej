@@ -1,0 +1,16 @@
+diff a/src/codec/SkJpegMetadataDecoderImpl.cpp b/src/codec/SkJpegMetadataDecoderImpl.cpp	(rejected hunks)
+@@ -7,10 +7,14 @@
+ 
+ #include "src/codec/SkJpegMetadataDecoderImpl.h"
+ 
++#include "arkweb/build/features/features.h"
+ #include "include/core/SkData.h"
+ #include "include/private/base/SkTemplates.h"
+ #include "src/codec/SkCodecPriv.h"
+ #include "src/codec/SkJpegConstants.h"
++#if BUILDFLAG(ARKWEB_MEDIA_POLICY)
++#include "base/logging.h"
++#endif
+ 
+ #include <cstdint>
+ #include <cstring>

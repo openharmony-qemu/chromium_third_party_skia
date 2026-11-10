@@ -472,6 +472,13 @@ protected:
         return SkTypeface::MakeEmpty();
     }
 
+#if BUILDFLAG(ARKWEB_THEME_FONT)
+    void onInvalidateThemeFont(const std::vector<int>& fds) override {}
+#endif
+
+#if BUILDFLAG(ARKWEB_CSS_FONT)
+    void onPrepareFontConfig() override {}
+#endif
 
 private:
 
