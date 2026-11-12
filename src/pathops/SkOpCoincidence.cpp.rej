@@ -1,19 +1,4 @@
 diff a/src/pathops/SkOpCoincidence.cpp b/src/pathops/SkOpCoincidence.cpp	(rejected hunks)
-@@ -693,12 +693,12 @@ bool SkOpCoincidence::addOrOverlap(SkOpSegment* coinSeg, SkOpSegment* oppSeg,
-         if (overlap->flipped()
-                 ? overlap->oppPtTEnd()->fT > test->oppPtTEnd()->fT
-                 : overlap->oppPtTEnd()->fT < test->oppPtTEnd()->fT) {
-             overlap->setOppPtTEnd(test->oppPtTEnd());
-         }
--        if (!fHead || !this->release(fHead, test)) {
--            SkAssertResult(this->release(fTop, test));
-+        if (!fHead || !this->release(&fHead, test)) {
-+            SkAssertResult(this->release(&fTop, test));
-         }
-     }
-     const SkOpPtT* cs = coinSeg->existing(coinTs, oppSeg);
-     const SkOpPtT* ce = coinSeg->existing(coinTe, oppSeg);
-     if (overlap && cs && ce && overlap->contains(cs, ce)) {
 @@ -1155,61 +1155,58 @@ bool SkOpCoincidence::apply(DEBUG_COIN_DECLARE_ONLY_PARAMS()) {
      } while ((coin = coin->next()));
      return true;
@@ -92,19 +77,6 @@ diff a/src/pathops/SkOpCoincidence.cpp b/src/pathops/SkOpCoincidence.cpp	(reject
  void SkOpCoincidence::restoreHead() {
      SkCoincidentSpans** headPtr = &fHead;
      while (*headPtr) {
-@@ -1246,11 +1243,11 @@ bool SkOpCoincidence::expand(DEBUG_COIN_DECLARE_ONLY_PARAMS()) {
-                 if (coin == test) {
-                     continue;
-                 }
-                 if (coin->coinPtTStart() == test->coinPtTStart()
-                         && coin->oppPtTStart() == test->oppPtTStart()) {
--                    this->release(fHead, test);
-+                    this->release(&fHead, test);
-                     break;
-                 }
-             } while ((test = test->next()));
-             expanded = true;
-         }
 @@ -1295,49 +1292,56 @@ bool SkOpCoincidence::findOverlaps(SkOpCoincidence* overlaps  DEBUG_COIN_DECLARE
  }
  

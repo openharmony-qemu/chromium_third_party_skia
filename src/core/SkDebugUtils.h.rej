@@ -11,15 +11,3 @@ diff a/src/core/SkDebugUtils.h b/src/core/SkDebugUtils.h	(rejected hunks)
  #include "include/private/base/SkDebug.h"
  
  #include <array>
-@@ -49,7 +50,11 @@ inline void SkDumpBuffer(uint8_t const* const buffer, int w, int h, int rowBytes
- }
- #else
- inline void SkDumpBuffer(uint8_t*, int, int, int) {}
- #endif
- 
-+static inline void SkDumpTag(SkFourByteTag tag) {
-+    SkDebugf("%c%c%c%c", (char)(tag >> 24), (char)(tag >> 16) & 0xFF, (char)(tag >> 8) & 0xFF, (char)tag & 0xFF);
-+}
-+
- 
- #endif // SkDebugUtils_DEFINED

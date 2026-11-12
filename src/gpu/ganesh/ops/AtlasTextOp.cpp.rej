@@ -18,19 +18,3 @@ diff a/src/gpu/ganesh/ops/AtlasTextOp.cpp b/src/gpu/ganesh/ops/AtlasTextOp.cpp	(
          flushInfo.fGeometryProcessor = GrBitmapTextGeoProc::Make(
                  target->allocator(), *target->caps().shaderCaps(), fHead->fColor,
                  /*wideColor=*/false, fColorSpaceXform, views, numActiveViews, filter,
-@@ -618,12 +622,13 @@ void AtlasTextOp::createDrawForGeneratedGlyphs(GrMeshDrawTarget* target,
-                         views, numActiveViews, GrSamplerState::Filter::kLinear);
-             }
-         } else
- #endif
-         {
--            auto filter = fNeedsGlyphTransform ? GrSamplerState::Filter::kLinear
--                                               : GrSamplerState::Filter::kNearest;
-+            const bool hasGlyphPadding = fHead->fSubRun.glyphSrcPadding() > 0;
-+            auto filter = fNeedsGlyphTransform && hasGlyphPadding
-+                    ? GrSamplerState::Filter::kLinear : GrSamplerState::Filter::kNearest;
-             reinterpret_cast<GrBitmapTextGeoProc*>(gp)->addNewViews(views, numActiveViews, filter);
-         }
-     }
-     int maxGlyphsPerDraw = static_cast<int>(flushInfo->fIndexBuffer->size() / sizeof(uint16_t) / 6);
-     GrSimpleMesh* mesh = target->allocMesh();

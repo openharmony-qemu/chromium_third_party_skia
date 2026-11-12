@@ -24,16 +24,3 @@ diff a/include/core/SkSerialProcs.h b/include/core/SkSerialProcs.h	(rejected hun
      void*               fPictureCtx = nullptr;
  
      SkSerialImageProc   fImageProc = nullptr;
-@@ -114,8 +117,12 @@ struct SK_API SkDeserialProcs {
- 
-     // This looks like a flag, but it could be considered a proc as well (one that takes no
-     // parameters and returns a bool). Given that there are only two valid implementations of that
-     // proc, we just insert the bool directly.
-     bool                         fAllowSkSL = true;
-+
-+    // Can be used to restrict the tags that will be deserialized from SkPictures.
-+    SkDeserialAllowTagsProc      fAllowTagsProc = nullptr;
-+    void*                        fAllowTagsCtx = nullptr;
- };
- 
- #endif

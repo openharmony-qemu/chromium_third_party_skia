@@ -26,27 +26,3 @@ diff a/src/core/SkWritePixelsRec.cpp b/src/core/SkWritePixelsRec.cpp	(rejected h
      int y = fY;
      SkIRect dstR = SkIRect::MakeXYWH(x, y, fInfo.width(), fInfo.height());
      if (!dstR.intersect({0, 0, dstWidth, dstHeight})) {
-@@ -29,13 +36,21 @@ bool SkWritePixelsRec::trim(int dstWidth, int dstHeight) {
-         x = 0;
-     }
-     if (y > 0) {
-         y = 0;
-     }
--    // here x,y are either 0 or negative
-+    // here x,y are either 0 or negative (safe to cast to size_t)
-     // we negate and add them so UBSAN (pointer-overflow) doesn't get confused.
--    fPixels = ((const char*)fPixels + -y*fRowBytes + -x*fInfo.bytesPerPixel());
-+    SkSafeMath safeMath;
-+    const size_t y_offset = safeMath.mul(-y, fRowBytes);
-+    const size_t x_offset = safeMath.mul(-x, fInfo.bytesPerPixel());
-+    const size_t total = safeMath.add(y_offset, x_offset);
-+    if (!safeMath.ok()) {
-+        return false;
-+    }
-+
-+    fPixels = ((const char*)fPixels + total);
-     // the intersect may have shrunk info's logical size
-     fInfo = fInfo.makeDimensions(dstR.size());
-     fX = dstR.x();
-     fY = dstR.y();
- 
