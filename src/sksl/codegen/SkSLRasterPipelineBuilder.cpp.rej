@@ -1,17 +1,4 @@
 diff a/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp b/src/sksl/codegen/SkSLRasterPipelineBuilder.cpp	(rejected hunks)
-@@ -385,11 +385,11 @@ void Builder::discard_stack(int32_t count, int stackID) {
-                 continue;
- 
-             case BuilderOp::copy_stack_to_slots_unmasked: {
-                 // Look for a pattern of `push, immediate-ops, pop` and simplify it down to an
-                 // immediate-op directly to the value slot.
--                if (count == 1) {
-+                if (count == lastInstruction->fImmA) {
-                     if (this->simplifyImmediateUnmaskedOp()) {
-                         return;
-                     }
-                 }
- 
 @@ -1372,11 +1372,11 @@ Program::StackDepths Program::tempStackMaxDepths() const {
      for (const Instruction& inst : fInstructions) {
          int stackID = inst.fStackID;
