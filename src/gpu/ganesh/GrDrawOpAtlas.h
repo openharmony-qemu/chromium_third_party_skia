@@ -194,9 +194,9 @@ private:
     bool uploadToPage(unsigned int pageIdx, GrDeferredUploadTarget*, int width, int height,
                       const void* image, skgpu::AtlasLocator*);
 
-    void uploadPlotToTexture(GrDeferredTextureUploadWritePixelsFn& writePixels,
-                             GrTextureProxy* proxy,
-                             skgpu::Plot* plot);
+    [[nodiscard]] bool uploadPlotToTexture(GrDeferredTextureUploadWritePixelsFn& writePixels,
+                                           GrTextureProxy* proxy,
+                                           skgpu::Plot* plot);
 
     bool createPages(GrProxyProvider*, skgpu::AtlasGenerationCounter*);
     bool activateNewPage(GrResourceProvider*);

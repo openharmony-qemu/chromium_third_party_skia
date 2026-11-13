@@ -37,6 +37,7 @@ Plot::Plot(int pageIndex, int plotIndex, AtlasGenerationCounter* generationCount
         , fIsFull(false)
 #ifdef SK_DEBUG
         , fDirty(false)
+        , fUploadInFlight(false)
 #endif
 {
     // We expect the allocated dimensions to be a multiple of 4 bytes
@@ -141,11 +142,13 @@ bool Plot::addSubImage(int width, int height, const void* image, AtlasLocator* a
 }
 
 std::pair<const void*, SkIRect> Plot::prepareForUpload() {
-    // We should only be issuing uploads if we are dirty
-    SkASSERT(fDirty);
-    if (!fData) {
+    if (!fData || fDirtyRect.isEmpty()) {
         return {nullptr, {}};
     }
+    // We should only be issuing uploads if we are dirty
+    SkASSERT(fDirty);
+    SkASSERT(!fUploadInFlight);
+    SkDEBUGCODE(fUploadInFlight = true;)
     const std::byte* dataPtr;
     SkIRect offsetRect;
     // Clamp to 4-byte aligned boundaries
@@ -160,10 +163,9 @@ std::pair<const void*, SkIRect> Plot::prepareForUpload() {
     dataPtr += fBytesPerPixel * fDirtyRect.fLeft;
     offsetRect = fDirtyRect.makeOffset(fOffset.fX, fOffset.fY);
 
-    fDirtyRect.setEmpty();
+    // We cannot clear the dirty rect here because we do not know the results of the
+    // associated writePixels call.
     fIsFull = false;
-    SkDEBUGCODE(fDirty = false);
-
     return { dataPtr, offsetRect };
 }
 
@@ -185,6 +187,7 @@ void Plot::resetRects(bool freeData) {
     fDirtyRect.setEmpty();
     fIsFull = false;
     SkDEBUGCODE(fDirty = false;)
+    SkDEBUGCODE(fUploadInFlight = false;)
 }
 
 } // namespace skgpu

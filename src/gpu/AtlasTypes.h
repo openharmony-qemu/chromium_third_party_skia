@@ -409,11 +409,17 @@ public:
 
     bool needsUpload() { return !fDirtyRect.isEmpty(); }
     std::pair<const void*, SkIRect> prepareForUpload();
+    void clearDirty() {
+        fDirtyRect.setEmpty();
+        SkDEBUGCODE(fDirty = false;)
+        SkDEBUGCODE(fUploadInFlight = false;)
+    }
     // Re-initialize Plot. The client should ensure that they process any eviction callbacks
     // before calling this, otherwise any cached references will point to invalid data.
     // If freeData is true, this will free the backing data as well. This should only be used
     // when we know we won't be adding to the Plot immediately afterwards.
     void resetRects(bool freeData);
+
 
     void markFullIfUsed() { fIsFull = !fDirtyRect.isEmpty(); }
     bool isEmpty() const { return fRectanizer.percentFull() == 0; }
@@ -464,6 +470,7 @@ private:
     SkIRect fDirtyRect;  // area in the Plot that needs to be uploaded
     bool fIsFull;
     SkDEBUGCODE(bool fDirty;)
+    SkDEBUGCODE(bool fUploadInFlight;)
 };
 
 typedef SkTInternalLList<Plot> PlotList;
